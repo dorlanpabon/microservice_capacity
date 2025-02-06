@@ -52,29 +52,29 @@ class CapacityRestControllerTest {
     }
 
     @Test
-    void testSaveTechnology() {
-        when(technologyHandler.saveTechnology(any(CapacityRequestDto.class))).thenReturn(Mono.empty());
+    void testsaveCapacity() {
+        when(technologyHandler.saveCapacity(any(CapacityRequestDto.class))).thenReturn(Mono.empty());
 
-        Mono<Void> result = capacityRestController.saveTechnology(capacityRequestDto);
+        Mono<Void> result = capacityRestController.saveCapacity(capacityRequestDto);
 
         assertNotNull(result);
 
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(technologyHandler, times(1)).saveTechnology(any(CapacityRequestDto.class));
+        verify(technologyHandler, times(1)).saveCapacity(any(CapacityRequestDto.class));
     }
 
     @Test
-    void testListTechnologies() {
-        when(technologyHandler.listTechnologies(any())).thenReturn(Flux.just(capacityResponseDto));
+    void testlistCapacities() {
+        when(technologyHandler.listCapacities(any())).thenReturn(Flux.just(capacityResponseDto));
 
-        Flux<CapacityResponseDto>  result = capacityRestController.listTechnologies(capacityPageRequestDto);
+        Flux<CapacityResponseDto>  result = capacityRestController.listCapacities(capacityPageRequestDto);
 
         assertNotNull(result);
 
         result.subscribe(response -> assertEquals("Todo", response.getName()));
 
-        verify(technologyHandler, times(1)).listTechnologies(any());
+        verify(technologyHandler, times(1)).listCapacities(any());
     }
 }

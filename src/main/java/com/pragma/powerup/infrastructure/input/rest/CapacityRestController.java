@@ -16,21 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping("/api/v1/technology")
+@RequestMapping("/capacity")
 @RequiredArgsConstructor
 public class CapacityRestController {
 
-    private final ICapacityHandler technologyHandler;
+    private final ICapacityHandler capacityHandler;
 
-    @Operation(summary = "Add a new technology")
+    @Operation(summary = "Add a new capacity")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Technology created", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Technology already exists", content = @Content)
+            @ApiResponse(responseCode = "201", description = "Capacity created", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Capacity already exists", content = @Content)
     })
     @PostMapping("/")
-    public Mono<Void> saveTechnology(@RequestBody CapacityRequestDto capacityRequestDto) {
-        return technologyHandler.saveTechnology(capacityRequestDto).then();
+    public Mono<Void> saveCapacity(@Valid @RequestBody CapacityRequestDto capacityRequestDto) {
+        return capacityHandler.saveCapacity(capacityRequestDto).then();
     }
 
     @Operation(summary = "List of technologies paginated by name")
@@ -38,8 +40,8 @@ public class CapacityRestController {
             @ApiResponse(responseCode = "200", description = "List of technologies", content = @Content)
     })
     @PostMapping("/list")
-    public Flux<CapacityResponseDto> listTechnologies(@RequestBody CapacityPageRequestDto capacityPageRequestDto) {
-        return technologyHandler.listTechnologies(capacityPageRequestDto);
+    public Flux<CapacityResponseDto> listCapacities(@Valid @RequestBody CapacityPageRequestDto capacityPageRequestDto) {
+        return capacityHandler.listCapacities(capacityPageRequestDto);
     }
 
 }

@@ -6,9 +6,9 @@ import reactor.core.publisher.Mono;
 
 public interface ICapacityPersistencePort {
 
-    Mono<Capacity> saveTechnology(Capacity capacity);
+    Mono<Capacity> saveCapacity(Capacity capacity);
 
-    Mono<Capacity> findTechnologyByName(String name);
+    Mono<Capacity> findCapacityByName(String name);
 
-    Flux<Capacity> listTechnologies(Integer page, Integer size, String direction);
+    Flux<Capacity> listCapacities(Integer page, Integer size, String direction);
 }

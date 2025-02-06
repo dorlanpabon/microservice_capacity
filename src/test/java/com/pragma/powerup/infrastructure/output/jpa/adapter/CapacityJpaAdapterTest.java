@@ -1,9 +1,9 @@
-package com.pragma.powerup.infrastructure.out.jpa.adapter;
+package com.pragma.powerup.infrastructure.output.jpa.adapter;
 
 import com.pragma.powerup.domain.model.Capacity;
-import com.pragma.powerup.infrastructure.out.jpa.entity.CapacityEntity;
-import com.pragma.powerup.infrastructure.out.jpa.mapper.ICapacityEntityMapper;
-import com.pragma.powerup.infrastructure.out.jpa.repository.ICapacityRepository;
+import com.pragma.powerup.infrastructure.output.jpa.entity.CapacityEntity;
+import com.pragma.powerup.infrastructure.output.jpa.mapper.ICapacityEntityMapper;
+import com.pragma.powerup.infrastructure.output.jpa.repository.ICapacityRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -43,12 +43,12 @@ class CapacityJpaAdapterTest {
     }
 
     @Test
-    void testSaveTechnology() {
+    void testsaveCapacity() {
         when(technologyEntityMapper.toEntity(any(Capacity.class))).thenReturn(capacityEntity);
         when(technologyRepository.save(any(CapacityEntity.class))).thenReturn(Mono.just(capacityEntity));
-        when(technologyEntityMapper.toTechnology(any(CapacityEntity.class))).thenReturn(capacity);
+        when(technologyEntityMapper.ToCapacity(any(CapacityEntity.class))).thenReturn(capacity);
 
-        Mono<Capacity> result = capacityJpaAdapter.saveTechnology(capacity);
+        Mono<Capacity> result = capacityJpaAdapter.saveCapacity(capacity);
 
         StepVerifier.create(result)
                 .expectNext(capacity)
@@ -59,10 +59,10 @@ class CapacityJpaAdapterTest {
     }
 
     @Test
-    void testFindTechnologyByName() {
+    void testfindCapacityByName() {
         when(technologyRepository.findByName(anyString())).thenReturn(Mono.empty());
 
-        Mono<Capacity> result = capacityJpaAdapter.findTechnologyByName("name");
+        Mono<Capacity> result = capacityJpaAdapter.findCapacityByName("name");
 
         StepVerifier.create(result)
                 .verifyComplete();
@@ -71,11 +71,11 @@ class CapacityJpaAdapterTest {
     }
 
     @Test
-    void testListTechnologies() {
+    void testlistCapacities() {
         when(technologyRepository.findBy(any())).thenReturn(Flux.just(capacityEntity));
-        when(technologyEntityMapper.toTechnology(any(CapacityEntity.class))).thenReturn(capacity);
+        when(technologyEntityMapper.ToCapacity(any(CapacityEntity.class))).thenReturn(capacity);
 
-        Flux<Capacity> result = capacityJpaAdapter.listTechnologies(1, 10, "ASC");
+        Flux<Capacity> result = capacityJpaAdapter.listCapacities(1, 10, "ASC");
 
         StepVerifier.create(result)
                 .expectNext(capacity)

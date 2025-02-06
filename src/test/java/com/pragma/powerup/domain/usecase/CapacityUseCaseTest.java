@@ -3,6 +3,7 @@ package com.pragma.powerup.domain.usecase;
 import com.pragma.powerup.domain.exception.DomainException;
 import com.pragma.powerup.domain.model.Capacity;
 import com.pragma.powerup.domain.spi.ICapacityPersistencePort;
+import com.pragma.powerup.domain.spi.ITechnologyPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,8 +16,12 @@ import reactor.test.StepVerifier;
 import static org.mockito.Mockito.*;
 
 class CapacityUseCaseTest {
+
     @Mock
-    ICapacityPersistencePort technologyPersistencePort;
+    ICapacityPersistencePort capacityPersistencePort;
+
+    @Mock
+    ITechnologyPersistencePort technologyPersistencePort;
 
     @InjectMocks
     CapacityUseCase capacityUseCase;
@@ -33,99 +38,100 @@ class CapacityUseCaseTest {
     }
 
     @Test
-    void testSaveTechnology_Success() {
-        when(technologyPersistencePort.findTechnologyByName(anyString())).thenReturn(Mono.empty());
-        when(technologyPersistencePort.saveTechnology(any(Capacity.class))).thenReturn(Mono.just(capacity));
+    void testsaveCapacity_Success() {
+        when(capacityPersistencePort.findCapacityByName(anyString())).thenReturn(Mono.empty());
+        when(capacityPersistencePort.saveCapacity(any(Capacity.class))).thenReturn(Mono.just(capacity));
+        when(technologyPersistencePort.saveTechnologiesCapacity(anyLong(), anyList())).thenReturn(Mono.empty());
 
-        Mono<Void> result = capacityUseCase.saveTechnology(capacity);
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
 
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(technologyPersistencePort, times(1)).findTechnologyByName("name");
-        verify(technologyPersistencePort, times(1)).saveTechnology(capacity);
+        verify(capacityPersistencePort, times(1)).findCapacityByName("name");
+        verify(capacityPersistencePort, times(1)).saveCapacity(capacity);
     }
 
     @Test
-    void testSaveTechnology_AlreadyExists() {
-        when(technologyPersistencePort.findTechnologyByName(any())).thenReturn(Mono.just(capacity));
+    void testsaveCapacity_AlreadyExists() {
+        when(capacityPersistencePort.findCapacityByName(any())).thenReturn(Mono.just(capacity));
 
-        Mono<Void> result = capacityUseCase.saveTechnology(capacity);
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
 
         StepVerifier.create(result)
                 .expectError(DomainException.class)
                 .verify();
 
-        verify(technologyPersistencePort, times(1)).findTechnologyByName("name");
-        verify(technologyPersistencePort, never()).saveTechnology(any(Capacity.class));
+        verify(capacityPersistencePort, times(1)).findCapacityByName("name");
+        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
     }
 
     @Test
-    void testSaveTechnology_NameNull() {
+    void testsaveCapacity_NameNull() {
         capacity.setName(null);
 
-        Mono<Void> result = capacityUseCase.saveTechnology(capacity);
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
 
         StepVerifier.create(result)
                 .expectError(DomainException.class)
                 .verify();
 
-        verify(technologyPersistencePort, never()).findTechnologyByName(anyString());
-        verify(technologyPersistencePort, never()).saveTechnology(any(Capacity.class));
+        verify(capacityPersistencePort, never()).findCapacityByName(anyString());
+        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
     }
 
     @Test
-    void testSaveTechnology_NameTooLong() {
+    void testsaveCapacity_NameTooLong() {
         capacity.setName("a".repeat(51));
 
-        Mono<Void> result = capacityUseCase.saveTechnology(capacity);
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
 
         StepVerifier.create(result)
                 .expectError(DomainException.class)
                 .verify();
 
-        verify(technologyPersistencePort, never()).findTechnologyByName(anyString());
-        verify(technologyPersistencePort, never()).saveTechnology(any(Capacity.class));
+        verify(capacityPersistencePort, never()).findCapacityByName(anyString());
+        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
     }
 
     @Test
-    void testSaveTechnology_DescriptionNull() {
+    void testsaveCapacity_DescriptionNull() {
         capacity.setDescription(null);
 
-        Mono<Void> result = capacityUseCase.saveTechnology(capacity);
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
 
         StepVerifier.create(result)
                 .expectError(DomainException.class)
                 .verify();
 
-        verify(technologyPersistencePort, never()).findTechnologyByName(anyString());
-        verify(technologyPersistencePort, never()).saveTechnology(any(Capacity.class));
+        verify(capacityPersistencePort, never()).findCapacityByName(anyString());
+        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
     }
 
     @Test
-    void testSaveTechnology_DescriptionTooLong() {
+    void testsaveCapacity_DescriptionTooLong() {
         capacity.setDescription("a".repeat(91));
 
-        Mono<Void> result = capacityUseCase.saveTechnology(capacity);
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
 
         StepVerifier.create(result)
                 .expectError(DomainException.class)
                 .verify();
 
-        verify(technologyPersistencePort, never()).findTechnologyByName(anyString());
-        verify(technologyPersistencePort, never()).saveTechnology(any(Capacity.class));
+        verify(capacityPersistencePort, never()).findCapacityByName(anyString());
+        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
     }
 
     @Test
-    void testListTechnologies() {
-        when(technologyPersistencePort.listTechnologies(anyInt(), anyInt(), anyString())).thenReturn(Flux.just(capacity));
+    void testlistCapacities() {
+        when(capacityPersistencePort.listCapacities(anyInt(), anyInt(), anyString())).thenReturn(Flux.just(capacity));
 
-        Flux<Capacity> result = capacityUseCase.listTechnologies(1, 10, "ASC");
+        Flux<Capacity> result = capacityUseCase.listCapacities(1, 10, "ASC");
 
         StepVerifier.create(result)
                 .expectNext(capacity)
                 .verifyComplete();
 
-        verify(technologyPersistencePort, times(1)).listTechnologies(1, 10, "ASC");
+        verify(capacityPersistencePort, times(1)).listCapacities(1, 10, "ASC");
     }
 }

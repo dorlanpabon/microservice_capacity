@@ -1,7 +1,7 @@
-package com.pragma.powerup.infrastructure.out.jpa.mapper;
+package com.pragma.powerup.infrastructure.output.jpa.mapper;
 
 import com.pragma.powerup.domain.model.Capacity;
-import com.pragma.powerup.infrastructure.out.jpa.entity.CapacityEntity;
+import com.pragma.powerup.infrastructure.output.jpa.entity.CapacityEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -12,5 +12,5 @@ import org.mapstruct.ReportingPolicy;
 public interface ICapacityEntityMapper {
 
     CapacityEntity toEntity(Capacity tecnology);
-    Capacity toTechnology(CapacityEntity tecnologyEntity);
+    Capacity ToCapacity(CapacityEntity tecnologyEntity);
 }

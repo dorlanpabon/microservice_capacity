@@ -1,10 +1,13 @@
 package com.pragma.powerup.domain.model;
 
+import java.util.List;
+
 public class Capacity {
 
     private Long id;
     private String name;
     private String description;
+    private List<Long> technologies;
 
     public Long getId() {
         return id;
@@ -28,5 +31,13 @@ public class Capacity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Long> getTechnologies() {
+        return technologies;
+    }
+
+    public void setTechnologies(List<Long> technologies) {
+        this.technologies = technologies;
     }
 }

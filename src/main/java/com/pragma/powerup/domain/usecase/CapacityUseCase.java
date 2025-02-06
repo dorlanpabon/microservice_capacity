@@ -5,37 +5,45 @@ import com.pragma.powerup.domain.constants.DomainConstants;
 import com.pragma.powerup.domain.exception.DomainException;
 import com.pragma.powerup.domain.model.Capacity;
 import com.pragma.powerup.domain.spi.ICapacityPersistencePort;
+import com.pragma.powerup.domain.spi.ITechnologyPersistencePort;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class CapacityUseCase implements ICapacityServicePort {
 
-    private final ICapacityPersistencePort technologyPersistencePort;
+    private final ICapacityPersistencePort capacityPersistencePort;
+    private final ITechnologyPersistencePort technologyPersistencePort;
 
-    public CapacityUseCase(ICapacityPersistencePort technologyPersistencePort) {
+    public CapacityUseCase(ICapacityPersistencePort capacityPersistencePort, ITechnologyPersistencePort technologyPersistencePort) {
+        this.capacityPersistencePort = capacityPersistencePort;
         this.technologyPersistencePort = technologyPersistencePort;
     }
 
     @Override
-    public Mono<Void> saveTechnology(Capacity capacity) {
-        return Mono.just(capacity)
-                .flatMap(tech -> {
-                    if (tech.getName() == null || tech.getName().length() > 50) {
+    public Mono<Void> saveCapacity(Capacity capacity) {
+        return Mono.justOrEmpty(capacity)
+                .flatMap(cap -> {
+                    if (cap.getName() == null || cap.getName().length() > 50) {
                         return Mono.error(new DomainException(DomainConstants.NAME_MUST_BE_LESS_THAN_50_CHARACTERS));
                     }
-                    if (tech.getDescription() == null || tech.getDescription().length() > 90) {
+                    if (cap.getDescription() == null || cap.getDescription().length() > 90) {
                         return Mono.error(new DomainException(DomainConstants.DESCRIPTION_MUST_BE_LESS_THAN_90_CHARACTERS));
                     }
-                    return technologyPersistencePort.findTechnologyByName(tech.getName());
+                    return capacityPersistencePort.findCapacityByName(cap.getName())
+                            .flatMap(existing -> Mono.error(new DomainException(DomainConstants.TECHNOLOGY_ALREADY_EXISTS)))
+                            .switchIfEmpty(capacityPersistencePort.saveCapacity(cap)
+                                    .flatMap(savedCapacity ->
+                                            technologyPersistencePort.saveTechnologiesCapacity(savedCapacity.getId(), cap.getTechnologies())
+                                    )
+                            );
                 })
-                .flatMap(tech -> Mono.error(new DomainException(DomainConstants.TECHNOLOGY_ALREADY_EXISTS)))
-                .switchIfEmpty(Mono.defer(() -> technologyPersistencePort.saveTechnology(capacity)))
                 .then();
     }
 
+
     @Override
-    public Flux<Capacity> listTechnologies(Integer page, Integer size, String direction) {
-        return technologyPersistencePort.listTechnologies(page, size, direction);
+    public Flux<Capacity> listCapacities(Integer page, Integer size, String direction) {
+        return capacityPersistencePort.listCapacities(page, size, direction);
     }
 
 

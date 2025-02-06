@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface ICapacityServicePort {
 
-    Mono<Void> saveTechnology(Capacity capacity);
+    Mono<Void> saveCapacity(Capacity capacity);
 
-    Flux<Capacity> listTechnologies(Integer page, Integer size, String direction);
+    Flux<Capacity> listCapacities(Integer page, Integer size, String direction);
 }

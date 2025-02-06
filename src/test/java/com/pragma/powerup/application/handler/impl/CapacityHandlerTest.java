@@ -60,31 +60,31 @@ class CapacityHandlerTest {
     }
 
     @Test
-    void testSaveTechnology() {
-        when(technologyRequestMapper.toTechnology(capacityRequestDto)).thenReturn(capacity);
-        when(technologyServicePort.saveTechnology(any())).thenReturn(Mono.empty());
+    void testsaveCapacity() {
+        when(technologyRequestMapper.ToCapacity(capacityRequestDto)).thenReturn(capacity);
+        when(technologyServicePort.saveCapacity(any())).thenReturn(Mono.empty());
 
-        Mono<Void> result = technologyHandler.saveTechnology(capacityRequestDto);
+        Mono<Void> result = technologyHandler.saveCapacity(capacityRequestDto);
 
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(technologyRequestMapper, times(1)).toTechnology(capacityRequestDto);
-        verify(technologyServicePort, times(1)).saveTechnology(any());
+        verify(technologyRequestMapper, times(1)).ToCapacity(capacityRequestDto);
+        verify(technologyServicePort, times(1)).saveCapacity(any());
     }
 
     @Test
-    void testListTechnologies() {
-        when(technologyServicePort.listTechnologies(1, 10, "ASC")).thenReturn(Flux.just(capacity));
-        when(technologyResponseMapper.toTechnologyResponseDto(capacity)).thenReturn(capacityResponseDto);
+    void testlistCapacities() {
+        when(technologyServicePort.listCapacities(1, 10, "ASC")).thenReturn(Flux.just(capacity));
+        when(technologyResponseMapper.ToCapacityResponseDto(capacity)).thenReturn(capacityResponseDto);
 
-        Flux<CapacityResponseDto> result = technologyHandler.listTechnologies(capacityPageRequestDto);
+        Flux<CapacityResponseDto> result = technologyHandler.listCapacities(capacityPageRequestDto);
 
         StepVerifier.create(result)
                 .expectNext(capacityResponseDto)
                 .verifyComplete();
 
-        verify(technologyServicePort, times(1)).listTechnologies(1, 10, "ASC");
-        verify(technologyResponseMapper, times(1)).toTechnologyResponseDto(capacity);
+        verify(technologyServicePort, times(1)).listCapacities(1, 10, "ASC");
+        verify(technologyResponseMapper, times(1)).ToCapacityResponseDto(capacity);
     }
 }

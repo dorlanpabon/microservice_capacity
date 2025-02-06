@@ -18,22 +18,22 @@ import reactor.core.publisher.Mono;
 @Transactional
 public class CapacityHandler implements ICapacityHandler {
 
-    private final ICapacityServicePort technologyServicePort;
-    private final ICapacityRequestMapper technologyRequestMapper;
-    private final ICapacityResponseMapper technologyResponseMapper;
+    private final ICapacityServicePort capacityServicePort;
+    private final ICapacityRequestMapper capacityRequestMapper;
+    private final ICapacityResponseMapper capacityResponseMapper;
 
     @Override
-    public Mono<Void> saveTechnology(CapacityRequestDto capacityRequestDto) {
+    public Mono<Void> saveCapacity(CapacityRequestDto capacityRequestDto) {
         return Mono.just(capacityRequestDto)
-                .map(technologyRequestMapper::toTechnology)
-                .flatMap(technologyServicePort::saveTechnology)
+                .map(capacityRequestMapper::ToCapacity)
+                .flatMap(capacityServicePort::saveCapacity)
                 .then();
     }
 
     @Override
-    public Flux<CapacityResponseDto> listTechnologies(CapacityPageRequestDto capacityPageRequestDto) {
-        return technologyServicePort.listTechnologies(capacityPageRequestDto.getPage(), capacityPageRequestDto.getSize(), capacityPageRequestDto.getDirection())
-                .map(technologyResponseMapper::toTechnologyResponseDto);
+    public Flux<CapacityResponseDto> listCapacities(CapacityPageRequestDto capacityPageRequestDto) {
+        return capacityServicePort.listCapacities(capacityPageRequestDto.getPage(), capacityPageRequestDto.getSize(), capacityPageRequestDto.getDirection())
+                .map(capacityResponseMapper::ToCapacityResponseDto);
     }
 
 

@@ -1,6 +1,6 @@
-package com.pragma.powerup.infrastructure.out.jpa.repository;
+package com.pragma.powerup.infrastructure.output.jpa.repository;
 
-import com.pragma.powerup.infrastructure.out.jpa.entity.CapacityEntity;
+import com.pragma.powerup.infrastructure.output.jpa.entity.CapacityEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;

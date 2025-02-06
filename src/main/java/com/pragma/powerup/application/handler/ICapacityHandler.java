@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 public interface ICapacityHandler {
 
-    Mono<Void> saveTechnology(CapacityRequestDto capacityRequestDto);
+    Mono<Void> saveCapacity(CapacityRequestDto capacityRequestDto);
 
-    Flux<CapacityResponseDto> listTechnologies(CapacityPageRequestDto capacityPageRequestDto);
+    Flux<CapacityResponseDto> listCapacities(CapacityPageRequestDto capacityPageRequestDto);
 }
