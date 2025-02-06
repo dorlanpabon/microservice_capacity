@@ -12,5 +12,5 @@ import org.mapstruct.ReportingPolicy;
 public interface ICapacityEntityMapper {
 
     CapacityEntity toEntity(Capacity tecnology);
-    Capacity ToCapacity(CapacityEntity tecnologyEntity);
+    Capacity toCapacity(CapacityEntity tecnologyEntity);
 }

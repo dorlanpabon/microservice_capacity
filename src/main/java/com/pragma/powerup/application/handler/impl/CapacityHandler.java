@@ -25,7 +25,7 @@ public class CapacityHandler implements ICapacityHandler {
     @Override
     public Mono<Void> saveCapacity(CapacityRequestDto capacityRequestDto) {
         return Mono.just(capacityRequestDto)
-                .map(capacityRequestMapper::ToCapacity)
+                .map(capacityRequestMapper::toCapacity)
                 .flatMap(capacityServicePort::saveCapacity)
                 .then();
     }
@@ -33,7 +33,7 @@ public class CapacityHandler implements ICapacityHandler {
     @Override
     public Flux<CapacityResponseDto> listCapacities(CapacityPageRequestDto capacityPageRequestDto) {
         return capacityServicePort.listCapacities(capacityPageRequestDto.getPage(), capacityPageRequestDto.getSize(), capacityPageRequestDto.getDirection())
-                .map(capacityResponseMapper::ToCapacityResponseDto);
+                .map(capacityResponseMapper::toCapacityResponseDto);
     }
 
 

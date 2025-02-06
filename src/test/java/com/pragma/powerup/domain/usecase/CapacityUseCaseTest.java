@@ -13,6 +13,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 class CapacityUseCaseTest {
@@ -28,6 +30,7 @@ class CapacityUseCaseTest {
 
     private Capacity capacity;
 
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -35,6 +38,10 @@ class CapacityUseCaseTest {
         capacity.setId(1L);
         capacity.setName("name");
         capacity.setDescription("description");
+
+        List<Long> technologies = List.of(1L, 2L,3L);
+
+        capacity.setTechnologies(technologies);
     }
 
     @Test
@@ -55,6 +62,7 @@ class CapacityUseCaseTest {
     @Test
     void testsaveCapacity_AlreadyExists() {
         when(capacityPersistencePort.findCapacityByName(any())).thenReturn(Mono.just(capacity));
+        when(capacityPersistencePort.saveCapacity(any(Capacity.class))).thenReturn(Mono.just(capacity));
 
         Mono<Void> result = capacityUseCase.saveCapacity(capacity);
 
@@ -63,7 +71,6 @@ class CapacityUseCaseTest {
                 .verify();
 
         verify(capacityPersistencePort, times(1)).findCapacityByName("name");
-        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
     }
 
     @Test
@@ -111,6 +118,48 @@ class CapacityUseCaseTest {
     @Test
     void testsaveCapacity_DescriptionTooLong() {
         capacity.setDescription("a".repeat(91));
+
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
+
+        StepVerifier.create(result)
+                .expectError(DomainException.class)
+                .verify();
+
+        verify(capacityPersistencePort, never()).findCapacityByName(anyString());
+        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
+    }
+
+    @Test
+    void testsaveCapacity_TechnologiesNull() {
+        capacity.setTechnologies(null);
+
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
+
+        StepVerifier.create(result)
+                .expectError(DomainException.class)
+                .verify();
+
+        verify(capacityPersistencePort, never()).findCapacityByName(anyString());
+        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
+    }
+
+    @Test
+    void testsaveCapacity_TechnologiesEmpty() {
+        capacity.setTechnologies(List.of());
+
+        Mono<Void> result = capacityUseCase.saveCapacity(capacity);
+
+        StepVerifier.create(result)
+                .expectError(DomainException.class)
+                .verify();
+
+        verify(capacityPersistencePort, never()).findCapacityByName(anyString());
+        verify(capacityPersistencePort, never()).saveCapacity(any(Capacity.class));
+    }
+
+    @Test
+    void testsaveCapacity_TechnologiesContainsZero() {
+        capacity.setTechnologies(List.of(1L, 0L));
 
         Mono<Void> result = capacityUseCase.saveCapacity(capacity);
 

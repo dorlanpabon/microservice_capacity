@@ -20,14 +20,7 @@ public class TechnologyPersistenceAdapter implements ITechnologyPersistencePort 
     public Mono<Boolean> saveTechnologiesCapacity(Long capacityId, List<Long> technologies) {
         return technologyFeignClient.saveTechnologiesCapacity(capacityId, technologies)
                 .thenReturn(true)
-                .onErrorResume(e -> Mono.just(false))
-                .doOnSuccess(success -> {
-                    if (success) {
-                        System.out.println("Todo bien");
-                    } else {
-                        System.out.println("Algo salió mal");
-                    }
-                });
+                .onErrorResume(e -> Mono.just(false));
     }
 
 }

@@ -10,6 +10,6 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface ICapacityResponseMapper {
 
-    CapacityResponseDto ToCapacityResponseDto(Capacity capacity);
+    CapacityResponseDto toCapacityResponseDto(Capacity capacity);
 
 }

@@ -17,9 +17,9 @@ import static org.mockito.Mockito.*;
 
 class CapacityJpaAdapterTest {
     @Mock
-    ICapacityRepository technologyRepository;
+    ICapacityRepository capacityRepository;
     @Mock
-    ICapacityEntityMapper technologyEntityMapper;
+    ICapacityEntityMapper capacityEntityMapper;
     @InjectMocks
     CapacityJpaAdapter capacityJpaAdapter;
     @Mock
@@ -44,9 +44,9 @@ class CapacityJpaAdapterTest {
 
     @Test
     void testsaveCapacity() {
-        when(technologyEntityMapper.toEntity(any(Capacity.class))).thenReturn(capacityEntity);
-        when(technologyRepository.save(any(CapacityEntity.class))).thenReturn(Mono.just(capacityEntity));
-        when(technologyEntityMapper.ToCapacity(any(CapacityEntity.class))).thenReturn(capacity);
+        when(capacityEntityMapper.toEntity(any(Capacity.class))).thenReturn(capacityEntity);
+        when(capacityRepository.save(any(CapacityEntity.class))).thenReturn(Mono.just(capacityEntity));
+        when(capacityEntityMapper.toCapacity(any(CapacityEntity.class))).thenReturn(capacity);
 
         Mono<Capacity> result = capacityJpaAdapter.saveCapacity(capacity);
 
@@ -54,26 +54,26 @@ class CapacityJpaAdapterTest {
                 .expectNext(capacity)
                 .verifyComplete();
 
-        verify(technologyEntityMapper, times(1)).toEntity(capacity);
-        verify(technologyRepository, times(1)).save(capacityEntity);
+        verify(capacityEntityMapper, times(1)).toEntity(capacity);
+        verify(capacityRepository, times(1)).save(capacityEntity);
     }
 
     @Test
     void testfindCapacityByName() {
-        when(technologyRepository.findByName(anyString())).thenReturn(Mono.empty());
+        when(capacityRepository.findByName(anyString())).thenReturn(Mono.empty());
 
         Mono<Capacity> result = capacityJpaAdapter.findCapacityByName("name");
 
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(technologyRepository, times(1)).findByName("name");
+        verify(capacityRepository, times(1)).findByName("name");
     }
 
     @Test
     void testlistCapacities() {
-        when(technologyRepository.findBy(any())).thenReturn(Flux.just(capacityEntity));
-        when(technologyEntityMapper.ToCapacity(any(CapacityEntity.class))).thenReturn(capacity);
+        when(capacityRepository.findBy(any())).thenReturn(Flux.just(capacityEntity));
+        when(capacityEntityMapper.toCapacity(any(CapacityEntity.class))).thenReturn(capacity);
 
         Flux<Capacity> result = capacityJpaAdapter.listCapacities(1, 10, "ASC");
 
@@ -81,6 +81,6 @@ class CapacityJpaAdapterTest {
                 .expectNext(capacity)
                 .verifyComplete();
 
-        verify(technologyRepository, times(1)).findBy(any());
+        verify(capacityRepository, times(1)).findBy(any());
     }
 }

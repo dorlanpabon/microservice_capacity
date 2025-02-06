@@ -21,13 +21,13 @@ public class CapacityJpaAdapter implements ICapacityPersistencePort {
     public Mono<Capacity> saveCapacity(Capacity capacity) {
         return Mono.just(technologyEntityMapper.toEntity(capacity))
                 .flatMap(technologyRepository::save)
-                .map(technologyEntityMapper::ToCapacity);
+                .map(technologyEntityMapper::toCapacity);
     }
 
     @Override
     public Mono<Capacity> findCapacityByName(String name) {
         return technologyRepository.findByName(name)
-                .map(technologyEntityMapper::ToCapacity);
+                .map(technologyEntityMapper::toCapacity);
     }
 
     @Override
@@ -35,6 +35,6 @@ public class CapacityJpaAdapter implements ICapacityPersistencePort {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), "name");
 
         return technologyRepository.findBy(pageable)
-                        .map(technologyEntityMapper::ToCapacity);
+                        .map(technologyEntityMapper::toCapacity);
     }
 }

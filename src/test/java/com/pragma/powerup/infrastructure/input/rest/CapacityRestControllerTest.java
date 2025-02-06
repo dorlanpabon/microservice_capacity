@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CapacityRestControllerTest {
     @Mock
-    ICapacityHandler technologyHandler;
+    ICapacityHandler capacityHandler;
 
     @InjectMocks
     CapacityRestController capacityRestController;
@@ -53,7 +53,7 @@ class CapacityRestControllerTest {
 
     @Test
     void testsaveCapacity() {
-        when(technologyHandler.saveCapacity(any(CapacityRequestDto.class))).thenReturn(Mono.empty());
+        when(capacityHandler.saveCapacity(any(CapacityRequestDto.class))).thenReturn(Mono.empty());
 
         Mono<Void> result = capacityRestController.saveCapacity(capacityRequestDto);
 
@@ -62,12 +62,12 @@ class CapacityRestControllerTest {
         StepVerifier.create(result)
                 .verifyComplete();
 
-        verify(technologyHandler, times(1)).saveCapacity(any(CapacityRequestDto.class));
+        verify(capacityHandler, times(1)).saveCapacity(any(CapacityRequestDto.class));
     }
 
     @Test
     void testlistCapacities() {
-        when(technologyHandler.listCapacities(any())).thenReturn(Flux.just(capacityResponseDto));
+        when(capacityHandler.listCapacities(any())).thenReturn(Flux.just(capacityResponseDto));
 
         Flux<CapacityResponseDto>  result = capacityRestController.listCapacities(capacityPageRequestDto);
 
@@ -75,6 +75,6 @@ class CapacityRestControllerTest {
 
         result.subscribe(response -> assertEquals("Todo", response.getName()));
 
-        verify(technologyHandler, times(1)).listCapacities(any());
+        verify(capacityHandler, times(1)).listCapacities(any());
     }
 }
