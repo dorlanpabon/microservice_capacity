@@ -57,6 +57,7 @@ class CapacityHandlerTest {
         capacityPageRequestDto.setPage(1);
         capacityPageRequestDto.setSize(10);
         capacityPageRequestDto.setDirection("ASC");
+        capacityPageRequestDto.setField("name");
     }
 
     @Test
@@ -75,7 +76,7 @@ class CapacityHandlerTest {
 
     @Test
     void testlistCapacities() {
-        when(capacityServicePort.listCapacities(1, 10, "ASC")).thenReturn(Flux.just(capacity));
+        when(capacityServicePort.listCapacities(1, 10, "ASC", "name")).thenReturn(Flux.just(capacity));
         when(capacityResponseMapper.toCapacityResponseDto(capacity)).thenReturn(capacityResponseDto);
 
         Flux<CapacityResponseDto> result = capacityHandler.listCapacities(capacityPageRequestDto);
@@ -84,7 +85,7 @@ class CapacityHandlerTest {
                 .expectNext(capacityResponseDto)
                 .verifyComplete();
 
-        verify(capacityServicePort, times(1)).listCapacities(1, 10, "ASC");
+        verify(capacityServicePort, times(1)).listCapacities(1, 10, "ASC", "name");
         verify(capacityResponseMapper, times(1)).toCapacityResponseDto(capacity);
     }
 }

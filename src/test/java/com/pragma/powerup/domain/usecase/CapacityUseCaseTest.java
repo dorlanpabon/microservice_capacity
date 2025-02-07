@@ -173,14 +173,15 @@ class CapacityUseCaseTest {
 
     @Test
     void testlistCapacities() {
-        when(capacityPersistencePort.listCapacities(anyInt(), anyInt(), anyString())).thenReturn(Flux.just(capacity));
+        when(capacityPersistencePort.listCapacities(anyInt(), anyInt(), anyString(), anyString())).thenReturn(Flux.just(capacity));
+        when(technologyPersistencePort.findTechnologiesByCapacity(anyLong())).thenReturn(Flux.just());
 
-        Flux<Capacity> result = capacityUseCase.listCapacities(1, 10, "ASC");
+        Flux<Capacity> result = capacityUseCase.listCapacities(1, 10, "ASC", "name");
 
         StepVerifier.create(result)
                 .expectNext(capacity)
                 .verifyComplete();
 
-        verify(capacityPersistencePort, times(1)).listCapacities(1, 10, "ASC");
+        verify(capacityPersistencePort, times(1)).listCapacities(1, 10, "ASC", "name");
     }
 }

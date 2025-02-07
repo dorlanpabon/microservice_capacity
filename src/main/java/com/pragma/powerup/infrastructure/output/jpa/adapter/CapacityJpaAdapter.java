@@ -31,8 +31,8 @@ public class CapacityJpaAdapter implements ICapacityPersistencePort {
     }
 
     @Override
-    public Flux<Capacity> listCapacities(Integer page, Integer size, String direction) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), "name");
+    public Flux<Capacity> listCapacities(Integer page, Integer size, String direction, String field) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.fromString(direction), field);
 
         return technologyRepository.findBy(pageable)
                         .map(technologyEntityMapper::toCapacity);

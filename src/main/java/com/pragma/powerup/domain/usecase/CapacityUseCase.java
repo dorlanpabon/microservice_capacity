@@ -4,6 +4,7 @@ import com.pragma.powerup.domain.api.ICapacityServicePort;
 import com.pragma.powerup.domain.constants.DomainConstants;
 import com.pragma.powerup.domain.exception.DomainException;
 import com.pragma.powerup.domain.model.Capacity;
+import com.pragma.powerup.domain.model.PaginationParams;
 import com.pragma.powerup.domain.spi.ICapacityPersistencePort;
 import com.pragma.powerup.domain.spi.ITechnologyPersistencePort;
 import reactor.core.publisher.Flux;
@@ -40,10 +41,26 @@ public class CapacityUseCase implements ICapacityServicePort {
                 .then();
     }
 
-
     @Override
-    public Flux<Capacity> listCapacities(Integer page, Integer size, String direction) {
-        return capacityPersistencePort.listCapacities(page, size, direction);
+    public Flux<Capacity> listCapacities(Integer page, Integer size, String direction, String field) {
+        return Mono.just(new PaginationParams(page, size, direction, field))
+                .filter(params -> params.getPage() >= 0 && params.getSize() > 0)
+                .switchIfEmpty(Mono.error(new DomainException(DomainConstants.INVALID_PAGINATION_PARAMS)))
+                .filter(params -> params.getField().equals("name") || params.getField().equals("technologyCount"))
+                .switchIfEmpty(Mono.error(new DomainException(DomainConstants.INVALID_SORT_FIELD)))
+                .filter(params -> params.getDirection().equalsIgnoreCase("asc") || params.getDirection().equalsIgnoreCase("desc"))
+                .switchIfEmpty(Mono.error(new DomainException(DomainConstants.INVALID_SORT_DIRECTION)))
+                .flatMapMany(validParams ->
+                        capacityPersistencePort.listCapacities(validParams.getPage(), validParams.getSize(), validParams.getDirection(), validParams.getField())
+                                .flatMap(capacity ->
+                                        technologyPersistencePort.findTechnologiesByCapacity(capacity.getId())
+                                                .collectList()
+                                                .map(technologies -> {
+                                                    capacity.setTechnologyList(technologies);
+                                                    return capacity;
+                                                })
+                                )
+                );
     }
 
 

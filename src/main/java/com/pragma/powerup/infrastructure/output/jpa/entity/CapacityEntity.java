@@ -22,4 +22,7 @@ public class CapacityEntity {
 
     @Column("description")
     private String description;
+
+    @Column("technology_count")
+    private Integer technologyCount;
 }

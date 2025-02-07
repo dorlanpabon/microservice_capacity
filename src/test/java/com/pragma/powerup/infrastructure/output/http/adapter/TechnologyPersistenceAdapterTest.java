@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -56,5 +57,16 @@ class TechnologyPersistenceAdapterTest {
                 .verifyComplete();
 
         verify(technologyFeignClient, times(1)).saveTechnologiesCapacity(1L, List.of(1L));
+    }
+
+    @Test
+
+    void testFindTechnologiesByCapacity() {
+        when(technologyFeignClient.findTechnologiesByCapacity(anyLong()))
+                .thenReturn(Flux.empty());
+
+        technologyPersistenceAdapter.findTechnologiesByCapacity(1L);
+
+        verify(technologyFeignClient, times(1)).findTechnologiesByCapacity(1L);
     }
 }

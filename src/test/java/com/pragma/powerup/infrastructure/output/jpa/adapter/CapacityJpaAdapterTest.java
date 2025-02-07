@@ -75,7 +75,7 @@ class CapacityJpaAdapterTest {
         when(capacityRepository.findBy(any())).thenReturn(Flux.just(capacityEntity));
         when(capacityEntityMapper.toCapacity(any(CapacityEntity.class))).thenReturn(capacity);
 
-        Flux<Capacity> result = capacityJpaAdapter.listCapacities(1, 10, "ASC");
+        Flux<Capacity> result = capacityJpaAdapter.listCapacities(1, 10, "ASC", "name");
 
         StepVerifier.create(result)
                 .expectNext(capacity)

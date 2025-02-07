@@ -10,5 +10,5 @@ public interface ICapacityPersistencePort {
 
     Mono<Capacity> findCapacityByName(String name);
 
-    Flux<Capacity> listCapacities(Integer page, Integer size, String direction);
+    Flux<Capacity> listCapacities(Integer page, Integer size, String direction, String field);
 }

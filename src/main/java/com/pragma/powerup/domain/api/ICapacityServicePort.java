@@ -8,5 +8,5 @@ public interface ICapacityServicePort {
 
     Mono<Void> saveCapacity(Capacity capacity);
 
-    Flux<Capacity> listCapacities(Integer page, Integer size, String direction);
+    Flux<Capacity> listCapacities(Integer page, Integer size, String direction, String field);
 }

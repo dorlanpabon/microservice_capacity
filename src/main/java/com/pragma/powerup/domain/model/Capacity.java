@@ -8,6 +8,8 @@ public class Capacity {
     private String name;
     private String description;
     private List<Long> technologies;
+    private List<Technology> technologyList;
+    private Integer technologyCount;
 
     public Long getId() {
         return id;
@@ -39,5 +41,21 @@ public class Capacity {
 
     public void setTechnologies(List<Long> technologies) {
         this.technologies = technologies;
+    }
+
+    public Integer getTechnologyCount() {
+        return technologyCount;
+    }
+
+    public void setTechnologyCount(Integer technologyCount) {
+        this.technologyCount = technologyCount;
+    }
+
+    public List<Technology> getTechnologyList() {
+        return technologyList;
+    }
+
+    public void setTechnologyList(List<Technology> technologyList) {
+        this.technologyList = technologyList;
     }
 }

@@ -15,7 +15,6 @@ public class CapacityPageRequestDto {
 
     @Schema(description = "Page number", example = "0")
     @NotNull
-    @Positive
     @Min(0)
     private Integer page;
 
@@ -29,5 +28,10 @@ public class CapacityPageRequestDto {
     @NotNull
     @Pattern(regexp = "ASC|DESC")
     private String direction;
+
+    @Schema(description = "Sort field", example = "name")
+    @NotNull
+    @Pattern(regexp = "name|technologyCount")
+    private String field;
 
 }

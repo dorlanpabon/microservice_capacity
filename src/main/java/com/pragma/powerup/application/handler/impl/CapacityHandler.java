@@ -32,7 +32,7 @@ public class CapacityHandler implements ICapacityHandler {
 
     @Override
     public Flux<CapacityResponseDto> listCapacities(CapacityPageRequestDto capacityPageRequestDto) {
-        return capacityServicePort.listCapacities(capacityPageRequestDto.getPage(), capacityPageRequestDto.getSize(), capacityPageRequestDto.getDirection())
+        return capacityServicePort.listCapacities(capacityPageRequestDto.getPage(), capacityPageRequestDto.getSize(), capacityPageRequestDto.getDirection(), capacityPageRequestDto.getField())
                 .map(capacityResponseMapper::toCapacityResponseDto);
     }
 

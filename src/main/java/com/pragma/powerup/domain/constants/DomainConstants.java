@@ -8,6 +8,9 @@ public class DomainConstants {
     public static final int MIN_TECHNOLOGIES = 3;
     public static final int MAX_TECHNOLOGIES = 20;
     public static final String INVALID_TECHNOLOGY_COUNT = "Invalid number of technologies";
+    public static final String INVALID_PAGINATION_PARAMS = "Invalid pagination params";
+    public static final String INVALID_SORT_FIELD = "Invalid sort field";
+    public static final String INVALID_SORT_DIRECTION = "Invalid sort direction";
 
     DomainConstants() {
         throw new IllegalStateException("Utility class");
