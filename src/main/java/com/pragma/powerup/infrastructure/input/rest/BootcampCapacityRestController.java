@@ -28,7 +28,7 @@ public class BootcampCapacityRestController {
             @ApiResponse(responseCode = "400", description = "Capacities bootcamp not saved", content = @Content)
     })
     @PostMapping("/{bootcampId}/save")
-    public Mono<Void> saveTechnologiesCapacity(@PathVariable Long bootcampId, @RequestBody List<Long> capacities) {
+    public Mono<Void> saveCapacitiesBootcamp(@PathVariable Long bootcampId, @RequestBody List<Long> capacities) {
         return bootcampCapacityHandler.saveCapacitiesBootcamp(bootcampId, capacities).then();
     }
 
