@@ -11,6 +11,11 @@ public class DomainConstants {
     public static final String INVALID_PAGINATION_PARAMS = "Invalid pagination params";
     public static final String INVALID_SORT_FIELD = "Invalid sort field";
     public static final String INVALID_SORT_DIRECTION = "Invalid sort direction";
+    public static final String INVALID_BOOTCAMP_ID = "Invalid bootcamp id";
+    public static final String EMPTY_CAPACITY_LIST = "Capacity list cannot be empty";
+    public static final int MIN_CAPACITIES = 1;
+    public static final int MAX_CAPACITIES = 3;
+    public static final String INVALID_CAPACITY_COUNT = "Invalid number of capacities";
 
     DomainConstants() {
         throw new IllegalStateException("Utility class");

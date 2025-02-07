@@ -35,9 +35,9 @@ public class CapacityRestController {
         return capacityHandler.saveCapacity(capacityRequestDto).then();
     }
 
-    @Operation(summary = "List of technologies paginated by name")
+    @Operation(summary = "List of capacities paginated by name")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of technologies", content = @Content)
+            @ApiResponse(responseCode = "200", description = "List of capacities", content = @Content)
     })
     @PostMapping("/list")
     public Flux<CapacityResponseDto> listCapacities(@Valid @RequestBody CapacityPageRequestDto capacityPageRequestDto) {
