@@ -11,4 +11,6 @@ public interface ICapacityHandler {
     Mono<Void> saveCapacity(CapacityRequestDto capacityRequestDto);
 
     Flux<CapacityResponseDto> listCapacities(CapacityPageRequestDto capacityPageRequestDto);
+
+    Mono<CapacityResponseDto> findCapacityById(Long id);
 }

@@ -37,4 +37,10 @@ public class CapacityJpaAdapter implements ICapacityPersistencePort {
         return technologyRepository.findBy(pageable)
                         .map(technologyEntityMapper::toCapacity);
     }
+
+    @Override
+    public Mono<Capacity> findCapacityByBootcampId(Long bootcampId) {
+        return technologyRepository.findByBootcampId(bootcampId)
+                .map(technologyEntityMapper::toCapacity);
+    }
 }

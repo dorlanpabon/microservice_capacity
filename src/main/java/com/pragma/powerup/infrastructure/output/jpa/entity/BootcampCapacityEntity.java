@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("bootcamp_technology")
+@Table("bootcamp_capacity")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

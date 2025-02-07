@@ -5,6 +5,7 @@ import com.pragma.powerup.domain.constants.DomainConstants;
 import com.pragma.powerup.domain.exception.DomainException;
 import com.pragma.powerup.domain.model.Capacity;
 import com.pragma.powerup.domain.model.PaginationParams;
+import com.pragma.powerup.domain.spi.IBootcampCapacityPersistencePort;
 import com.pragma.powerup.domain.spi.ICapacityPersistencePort;
 import com.pragma.powerup.domain.spi.ITechnologyPersistencePort;
 import reactor.core.publisher.Flux;
@@ -14,10 +15,12 @@ public class CapacityUseCase implements ICapacityServicePort {
 
     private final ICapacityPersistencePort capacityPersistencePort;
     private final ITechnologyPersistencePort technologyPersistencePort;
+    private final IBootcampCapacityPersistencePort bootcampCapacityPersistencePort;
 
-    public CapacityUseCase(ICapacityPersistencePort capacityPersistencePort, ITechnologyPersistencePort technologyPersistencePort) {
+    public CapacityUseCase(ICapacityPersistencePort capacityPersistencePort, ITechnologyPersistencePort technologyPersistencePort, IBootcampCapacityPersistencePort bootcampCapacityPersistencePort) {
         this.capacityPersistencePort = capacityPersistencePort;
         this.technologyPersistencePort = technologyPersistencePort;
+        this.bootcampCapacityPersistencePort = bootcampCapacityPersistencePort;
     }
 
     @Override
@@ -60,6 +63,21 @@ public class CapacityUseCase implements ICapacityServicePort {
                                                     return capacity;
                                                 })
                                 )
+                );
+    }
+
+    @Override
+    public Mono<Capacity> findCapacityById(Long id) {
+        return Mono.justOrEmpty(id)
+                .switchIfEmpty(Mono.error(new DomainException(DomainConstants.INVALID_CAPACITY_ID)))
+                .flatMap(capacityPersistencePort::findCapacityByBootcampId)
+                .flatMap(capacity ->
+                        technologyPersistencePort.findTechnologiesByCapacity(capacity.getId())
+                                .collectList()
+                                .map(technologies -> {
+                                    capacity.setTechnologyList(technologies);
+                                    return capacity;
+                                })
                 );
     }
 

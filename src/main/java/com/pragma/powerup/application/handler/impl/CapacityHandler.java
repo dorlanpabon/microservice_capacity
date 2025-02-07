@@ -36,5 +36,11 @@ public class CapacityHandler implements ICapacityHandler {
                 .map(capacityResponseMapper::toCapacityResponseDto);
     }
 
+    @Override
+    public Mono<CapacityResponseDto> findCapacityById(Long id) {
+        return capacityServicePort.findCapacityById(id)
+                .map(capacityResponseMapper::toCapacityResponseDto);
+    }
+
 
 }

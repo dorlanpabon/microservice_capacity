@@ -11,4 +11,6 @@ public interface ICapacityPersistencePort {
     Mono<Capacity> findCapacityByName(String name);
 
     Flux<Capacity> listCapacities(Integer page, Integer size, String direction, String field);
+
+    Mono<Capacity> findCapacityByBootcampId(Long bootcampId);
 }

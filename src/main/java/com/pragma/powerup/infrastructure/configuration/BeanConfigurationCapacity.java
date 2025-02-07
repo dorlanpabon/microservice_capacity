@@ -1,13 +1,17 @@
 package com.pragma.powerup.infrastructure.configuration;
 
 import com.pragma.powerup.domain.api.ICapacityServicePort;
+import com.pragma.powerup.domain.spi.IBootcampCapacityPersistencePort;
 import com.pragma.powerup.domain.spi.ICapacityPersistencePort;
 import com.pragma.powerup.domain.spi.ITechnologyPersistencePort;
 import com.pragma.powerup.domain.usecase.CapacityUseCase;
 import com.pragma.powerup.infrastructure.output.http.adapter.TechnologyPersistenceAdapter;
 import com.pragma.powerup.infrastructure.output.http.client.TechnologyFeignClient;
+import com.pragma.powerup.infrastructure.output.jpa.adapter.BootcampCapacityJpaAdapter;
 import com.pragma.powerup.infrastructure.output.jpa.adapter.CapacityJpaAdapter;
+import com.pragma.powerup.infrastructure.output.jpa.mapper.IBootcampCapacityEntityMapper;
 import com.pragma.powerup.infrastructure.output.jpa.mapper.ICapacityEntityMapper;
+import com.pragma.powerup.infrastructure.output.jpa.repository.IBootcampCapacityRepository;
 import com.pragma.powerup.infrastructure.output.jpa.repository.ICapacityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 public class BeanConfigurationCapacity {
     private final ICapacityRepository technologyRepository;
     private final ICapacityEntityMapper technologyEntityMapper;
+    private final IBootcampCapacityRepository bootcampCapacityRepository;
+    private final IBootcampCapacityEntityMapper bootcampTechnologyEntityMapper;
     private final TechnologyFeignClient technologyFeignClient;
     private final HttpServletRequest request;
 
@@ -29,8 +35,13 @@ public class BeanConfigurationCapacity {
     }
 
     @Bean
+    public IBootcampCapacityPersistencePort bootcampCapacityPersistencePort() {
+        return new BootcampCapacityJpaAdapter(bootcampCapacityRepository, bootcampTechnologyEntityMapper);
+    }
+
+    @Bean
     public ICapacityServicePort technologyServicePort() {
-        return new CapacityUseCase(technologyPersistencePort(), technologyServiceAdapter());
+        return new CapacityUseCase(technologyPersistencePort(), technologyServiceAdapter(), bootcampCapacityPersistencePort());
     }
 
     @Bean

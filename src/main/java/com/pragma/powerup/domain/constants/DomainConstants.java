@@ -16,6 +16,7 @@ public class DomainConstants {
     public static final int MIN_CAPACITIES = 1;
     public static final int MAX_CAPACITIES = 3;
     public static final String INVALID_CAPACITY_COUNT = "Invalid number of capacities";
+    public static final String INVALID_CAPACITY_ID = "Invalid capacity id";
 
     DomainConstants() {
         throw new IllegalStateException("Utility class");

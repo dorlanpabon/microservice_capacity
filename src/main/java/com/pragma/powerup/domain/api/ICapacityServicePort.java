@@ -9,4 +9,6 @@ public interface ICapacityServicePort {
     Mono<Void> saveCapacity(Capacity capacity);
 
     Flux<Capacity> listCapacities(Integer page, Integer size, String direction, String field);
+
+    Mono<Capacity> findCapacityById(Long id);
 }
