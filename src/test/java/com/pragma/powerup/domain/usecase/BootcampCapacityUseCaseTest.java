@@ -78,4 +78,37 @@ class BootcampCapacityUseCaseTest {
         verify(bootcampCapacityPersistencePort, never()).saveCapacitiesBootcamp(anyLong(), any());
     }
 
+    @Test
+    void testSaveTechnologiesCapacity_NullTechnologyList_ShouldThrowException() {
+        Long capacityId = 1L;
+        Mono<Void> result = bootcampCapacityUseCase.saveCapacitiesBootcamp(capacityId, null);
+
+        StepVerifier.create(result)
+                .expectErrorSatisfies(throwable -> {
+                    assert throwable instanceof DomainException;
+                    assert ((DomainException) throwable).getMessage().equals(DomainConstants.EMPTY_CAPACITY_LIST);
+                })
+                .verify();
+
+        verify(bootcampCapacityPersistencePort, never()).saveCapacitiesBootcamp(anyLong(), any());
+    }
+
+    @Test
+    void testSaveTechnologiesCapacity_InvalidCapacityCount_ShouldThrowException() {
+        Long capacityId = 1L;
+        List<Long> invalidList = List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L);
+
+        Mono<Void> result = bootcampCapacityUseCase.saveCapacitiesBootcamp(capacityId, invalidList);
+
+        StepVerifier.create(result)
+                .expectErrorSatisfies(throwable -> {
+                    assert throwable instanceof DomainException;
+                    assert ((DomainException) throwable).getMessage().equals(DomainConstants.INVALID_CAPACITY_COUNT);
+                })
+                .verify();
+
+        verify(bootcampCapacityPersistencePort, never()).saveCapacitiesBootcamp(anyLong(), any());
+    }
+
+
 }

@@ -184,4 +184,62 @@ class CapacityUseCaseTest {
 
         verify(capacityPersistencePort, times(1)).listCapacities(1, 10, "ASC", "name");
     }
+
+    @Test
+    void testlistCapacities_InvalidPage() {
+        Flux<Capacity> result = capacityUseCase.listCapacities(-1, 10, "ASC", "name");
+
+        StepVerifier.create(result)
+                .expectError(DomainException.class)
+                .verify();
+
+        verify(capacityPersistencePort, never()).listCapacities(anyInt(), anyInt(), anyString(), anyString());
+    }
+
+    @Test
+    void testlistCapacities_InvalidSize() {
+        Flux<Capacity> result = capacityUseCase.listCapacities(1, 0, "ASC", "name");
+
+        StepVerifier.create(result)
+                .expectError(DomainException.class)
+                .verify();
+
+        verify(capacityPersistencePort, never()).listCapacities(anyInt(), anyInt(), anyString(), anyString());
+    }
+
+    @Test
+    void testlistCapacities_InvalidField() {
+        Flux<Capacity> result = capacityUseCase.listCapacities(1, 10, "ASC", "invalid");
+
+        StepVerifier.create(result)
+                .expectError(DomainException.class)
+                .verify();
+
+        verify(capacityPersistencePort, never()).listCapacities(anyInt(), anyInt(), anyString(), anyString());
+    }
+
+    @Test
+    void testlistCapacities_InvalidDirection() {
+        Flux<Capacity> result = capacityUseCase.listCapacities(1, 10, "invalid", "name");
+
+        StepVerifier.create(result)
+                .expectError(DomainException.class)
+                .verify();
+
+        verify(capacityPersistencePort, never()).listCapacities(anyInt(), anyInt(), anyString(), anyString());
+    }
+
+    @Test
+    void testFindCapacityById() {
+        when(capacityPersistencePort.findCapacityByBootcampId(anyLong())).thenReturn(Mono.just(capacity));
+        when(technologyPersistencePort.findTechnologiesByCapacity(anyLong())).thenReturn(Flux.just());
+
+        Mono<Capacity> result = capacityUseCase.findCapacityById(1L);
+
+        StepVerifier.create(result)
+                .expectNext(capacity)
+                .verifyComplete();
+
+        verify(capacityPersistencePort, times(1)).findCapacityByBootcampId(1L);
+    }
 }

@@ -88,4 +88,20 @@ class CapacityHandlerTest {
         verify(capacityServicePort, times(1)).listCapacities(1, 10, "ASC", "name");
         verify(capacityResponseMapper, times(1)).toCapacityResponseDto(capacity);
     }
+
+    @Test
+    void testfindCapacityById() {
+        when(capacityServicePort.findCapacityById(1L)).thenReturn(Mono.just(capacity));
+        when(capacityResponseMapper.toCapacityResponseDto(capacity)).thenReturn(capacityResponseDto);
+
+        Mono<CapacityResponseDto> result = capacityHandler.findCapacityById(1L);
+
+        StepVerifier.create(result)
+                .expectNext(capacityResponseDto)
+                .verifyComplete();
+
+        verify(capacityServicePort, times(1)).findCapacityById(1L);
+        verify(capacityResponseMapper, times(1)).toCapacityResponseDto(capacity);
+    }
+
 }

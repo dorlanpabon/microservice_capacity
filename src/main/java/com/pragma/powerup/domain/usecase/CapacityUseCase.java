@@ -5,7 +5,6 @@ import com.pragma.powerup.domain.constants.DomainConstants;
 import com.pragma.powerup.domain.exception.DomainException;
 import com.pragma.powerup.domain.model.Capacity;
 import com.pragma.powerup.domain.model.PaginationParams;
-import com.pragma.powerup.domain.spi.IBootcampCapacityPersistencePort;
 import com.pragma.powerup.domain.spi.ICapacityPersistencePort;
 import com.pragma.powerup.domain.spi.ITechnologyPersistencePort;
 import reactor.core.publisher.Flux;
@@ -15,12 +14,10 @@ public class CapacityUseCase implements ICapacityServicePort {
 
     private final ICapacityPersistencePort capacityPersistencePort;
     private final ITechnologyPersistencePort technologyPersistencePort;
-    private final IBootcampCapacityPersistencePort bootcampCapacityPersistencePort;
 
-    public CapacityUseCase(ICapacityPersistencePort capacityPersistencePort, ITechnologyPersistencePort technologyPersistencePort, IBootcampCapacityPersistencePort bootcampCapacityPersistencePort) {
+    public CapacityUseCase(ICapacityPersistencePort capacityPersistencePort, ITechnologyPersistencePort technologyPersistencePort) {
         this.capacityPersistencePort = capacityPersistencePort;
         this.technologyPersistencePort = technologyPersistencePort;
-        this.bootcampCapacityPersistencePort = bootcampCapacityPersistencePort;
     }
 
     @Override

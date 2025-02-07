@@ -41,7 +41,7 @@ public class BeanConfigurationCapacity {
 
     @Bean
     public ICapacityServicePort technologyServicePort() {
-        return new CapacityUseCase(technologyPersistencePort(), technologyServiceAdapter(), bootcampCapacityPersistencePort());
+        return new CapacityUseCase(technologyPersistencePort(), technologyServiceAdapter());
     }
 
     @Bean

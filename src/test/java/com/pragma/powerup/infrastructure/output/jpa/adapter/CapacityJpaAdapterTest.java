@@ -83,4 +83,16 @@ class CapacityJpaAdapterTest {
 
         verify(capacityRepository, times(1)).findBy(any());
     }
+
+    @Test
+    void testfindCapacityByBootcampId() {
+        when(capacityRepository.findByBootcampId(anyLong())).thenReturn(Mono.empty());
+
+        Mono<Capacity> result = capacityJpaAdapter.findCapacityByBootcampId(1L);
+
+        StepVerifier.create(result)
+                .verifyComplete();
+
+        verify(capacityRepository, times(1)).findByBootcampId(1L);
+    }
 }

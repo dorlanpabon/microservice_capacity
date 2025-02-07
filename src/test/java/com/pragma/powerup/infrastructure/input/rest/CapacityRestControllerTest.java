@@ -77,4 +77,19 @@ class CapacityRestControllerTest {
 
         verify(capacityHandler, times(1)).listCapacities(any());
     }
+
+    @Test
+    void testfindCapacityById() {
+        when(capacityHandler.findCapacityById(anyLong())).thenReturn(Mono.just(capacityResponseDto));
+
+        Mono<CapacityResponseDto> result = capacityRestController.findCapacityById(1L);
+
+        assertNotNull(result);
+
+        StepVerifier.create(result)
+                .expectNextMatches(response -> response.getName().equals("Todo"))
+                .verifyComplete();
+
+        verify(capacityHandler, times(1)).findCapacityById(anyLong());
+    }
 }
